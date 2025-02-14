@@ -8,7 +8,7 @@ import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import CreatePost from './pages/CreatePost'
-import UserContextProvisder from './context/userContext'
+import UserContextProvider from './context/userContext'
 
 
 
@@ -17,7 +17,8 @@ function App() {
   return (
     <>
       <div>
-        <UserContextProvider></UserContextProvider>
+        <UserContextProvider>
+
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
@@ -29,6 +30,7 @@ function App() {
           <Route path='/profile/:id' element={<Profile />} />
 
         </Routes>
+        </UserContextProvider>
       </div>
     </>
   )

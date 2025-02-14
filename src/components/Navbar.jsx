@@ -14,7 +14,7 @@ function Navbar() {
     const showMenu = () => {
         showMenu(!menu)
     }
-const {user} =useContext(UserContext)
+    const { user } = useContext(UserContext)
 
     return (
         <div>
@@ -36,17 +36,18 @@ const {user} =useContext(UserContext)
                         </h3>
                     }
                     {user ? <div onClick={showMenu}>
-                        <p className='cursor-pointer relative'>
+                        <p className='cursor-pointer relative'></p>
                             <FaBars />
                             {menu && <Menu />}
 
-                        </p>
+                        
                     </div> : <h3><Link to='/register'>Register</Link></h3>}
                 </div>
                 <div onClick={showMenu} className='md:hidden text-lg'>
-                    <p className='cursor-pointer relative'>
-                        <FaBars /></p>
+                    <p className='cursor-pointer relative'></p>
+                    <FaBars />
                     {menu && <Menu />}
+            
 
                 </div>
 
