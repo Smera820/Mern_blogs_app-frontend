@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import BsSearch from 'react-icons/bs'
-import FaBars from 'react-icons/fa'
+import { BsSearch} from "react-icons/bs"; 
+import {FaBars} from "react-icons/fa"
 import Menu from './Menu'
+import { UserContext } from '../context/userContext';
 
 
 function Navbar() {
@@ -18,7 +19,7 @@ function Navbar() {
 
     return (
         <div>
-            <div className='flex items-center justify-between px-6 md:px-{200px} py-4 bg-black text-white'>
+            <div className='flex items-center justify-between px-50 md:px-{200px} py-4 bg-black text-white'>
                 <h1 className='text-lg md:text-xl font-extrabold'>
                     <Link to="/">Blogoshere</Link>
 

@@ -6,7 +6,7 @@ import {URL} from '../url'
 export const UserContext=createContext({})
 
 
-export default function UserContextProvider({childern}) {
+export default function UserContextProvider({ children }) {
     const [user,setUser]= useState(null)
     useEffect(()=>{
         getUser()
@@ -14,18 +14,18 @@ export default function UserContextProvider({childern}) {
 
     const getUser=async()=>{
         try{
-            const res= await axios.get(URL+"/api/auth/refech",{withCredentials:true})
+            const res = await axios.get(URL + "/api/auth/refresh", { withCredentials: true });
             setUser(res.data)
         }
         catch(err){
-            console.log(err);
+            console.log("Error fetching user:",err.res?err.res.data:err.message);
             
         }
     }
     return (
         <div>
             <UserContext.Provider value={{user,setUser}}>
-                {childern}
+            {children}
             </UserContext.Provider>
         </div>
     )
