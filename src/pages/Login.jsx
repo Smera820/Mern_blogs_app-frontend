@@ -8,7 +8,7 @@ import { UserContext } from '../context/userContext'
 
 
 function Login() {
-
+ 
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
   const [error, seterror] = useState(false)
@@ -68,7 +68,7 @@ function Login() {
           <h1 className='text-xl font-bold text-left'>
             Login to your account
           </h1>
-
+  
           <input onChange={(e) => setemail(e.target.value)} className='w-full px-4 py-2 border-black outline-0' type='email' placeholder='Enter your email'>
           </input>
           <input onChange={(e) => setpassword(e.target.value)} className='w-full px-4 py-2 border-black outline-0' type='password' placeholder='Enter your password'>
