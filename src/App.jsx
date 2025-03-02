@@ -12,6 +12,8 @@ import UserContextProvider from './context/userContext'
 
 
 
+
+
 function App() {
 
   return (
@@ -21,13 +23,13 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/write' element={<CreatePost />} />
-          <Route path='/Post/post/:id' element={<PostDetails />} />
+          <Route path='/posts/post/:id' element={<PostDetails />} />
           <Route path='/edit/:id' element={<EditPost />} />
           <Route path='/myblogs/:id' element={<MyBlogs />} />
           <Route path='/profile/:id' element={<Profile />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/write' element={<CreatePost />} />
 
         </Routes>
         </UserContextProvider>
