@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../components/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useContext } from 'react'
-import { UserContext } from '../context/userContext'
+import { UserContext } from '../context/UserContext'
 import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { ImCross } from 'react-icons/im'
+
 
 function EditPost() {
   const postId = useParams().id
@@ -38,8 +39,8 @@ function EditPost() {
       desc,
       username: user.username, 
       userId: user.userId, 
-      categories: cats,
-      file: res.data.photo
+      categories: cats
+      // file: res.data.photo
     };
 
     if (file) {
@@ -68,18 +69,19 @@ function EditPost() {
     fetchPost()
   }, [postId])
 
-  const addCate = () => {
+  const deleteCategory = (i) => {
+    let updatedCats = [...cats]
+    updatedCats.splice(i)
+    setCats(updatedCats)
+  }
+
+  const addCategory = () => {
     let updatedCats = [...cats]
     updatedCats.push(cat)
     setCat(" ")
     setCats(updatedCats)
   }
 
-  const deleteCategory = (i) => {
-    let updatedCats = [...cats]
-    updatedCats.splice(i, 1)
-    setCats(updatedCats)
-  }
 
   return (
     <div>
@@ -103,7 +105,7 @@ function EditPost() {
                 <input type="text" value={cat} onChange={(e) => setCat(e.target.value)}
                   placeholder='Enter post category'
                   className='px-4 py-2 outline-none' />
-                <div onClick={addCate} className='bg-black text-white px-4 py-3 font-semibold cursor-pointer'>
+                <div onClick={addCategory} className='bg-black text-white px-4 py-3 font-semibold cursor-pointer'>
                   ADD
                 </div>
                 <div className='flex px-4 mt-3'>
@@ -111,10 +113,11 @@ function EditPost() {
                     <div key={i} className='flex justify-center space-x-2 mr-4 bg-gray-200 px-2 py-1 rounded-md'>
                       <p>{c}</p>
                       <p onClick={() => deleteCategory(i)} className='text-white bg-black rounded-full cursor-pointer p-1 text-sm'>
-                        <ImCross size={12} />
+                        <ImCross/>
                       </p>
                     </div>
                   ))}
+
                 </div>
               </div>
 
@@ -123,7 +126,7 @@ function EditPost() {
 
             </textarea>
             <button onClick={handleUpdate} className='bg-black w-full md:w[20%] mx-auto text-white font-semibold px-4 py-2 md:text-xl text-lg'>
-              Create
+              Update
             </button>
           </form>
         </div>

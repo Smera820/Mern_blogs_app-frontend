@@ -1,26 +1,26 @@
 import axios from 'axios'
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
+import { URL } from '../url'
 import Footer from '../components/Footer'
-import { UserContext } from '../context/userContext'
-
+import { UserContext } from '../context/UserContext'
 
 
 function Login() {
  
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
-  const [error, seterror] = useState(false)
+  const [error, setError] = useState(false)
   const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
   const handleLogin = async () => {
     try {
-      const res = await fetch("/api/auth/login", {
+      // const res=await axios.post(URL+"/api/auth/login",{email,password},{withCredentials:true})
+      const res = await fetch( "/api/auth/login", {
         method: 'POST',
         headers: {
-          'content-type': 'application/json',
+          'Content-type': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({ email: email, password: password })
@@ -29,14 +29,13 @@ function Login() {
       if (res.ok) {
         const data = await res.json()
         const cookies = res.headers.get('Set-Cookies')
-        console.warn('Data', data);
-        console.warn('Cookies', cookies);
+        console.warn('Data:', data);
+        console.warn('Cookies:', cookies);
 
         setUser(data)
-
       }
       else {
-        console.error('Request failed with status', res.status);
+        console.error('Request failed with status:', res.status);
 
 
       }
@@ -45,7 +44,7 @@ function Login() {
 
     }
     catch (err) {
-      seterror(true)
+      setError(true)
       console.log(err);
 
     }
@@ -84,7 +83,8 @@ function Login() {
           <div className='flex justify-center items-center space-x-3'>
             <p>
               New Here
-            </p><p className='text-green-500 hover:text-black'>
+            </p>
+            <p className='text-green-500 hover:text-black'>
 
               <Link to='/register'>Register</Link>
             </p>
@@ -101,3 +101,5 @@ function Login() {
 }
 
 export default Login
+
+

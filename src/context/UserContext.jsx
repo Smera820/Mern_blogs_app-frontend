@@ -18,7 +18,7 @@ export default function UserContextProvider({ children }) {
             setUser(res.data)
         }
         catch(err){
-            console.log("Error fetching user:",err.res?err.res.data:err.message);
+            console.log(err);
             
         }
     }

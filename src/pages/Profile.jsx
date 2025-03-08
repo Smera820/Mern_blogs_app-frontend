@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { UserContext } from '../context/userContext'
+import { UserContext } from '../context/UserContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import axios from 'axios'
+import { URL } from '../url'
 
 
 function Profile() {
@@ -13,11 +14,12 @@ function Profile() {
   const [password, setPassword] = useState("")
   const { user, setUser } = useContext(UserContext)
   const navigate = useNavigate()
+  const [posts,setPosts]=useState([])
   const [updated, setUpdated] = useState(false)
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("/api/user" + user._id)
+      const res = await axios.get(URL+"/api/user" + user._id)
       setUsername(res.data.username)
       setEmail(res.data.email)
       setPassword(res.data.password)
@@ -33,7 +35,7 @@ function Profile() {
   const handleUserUpdated = async () => {
     setUpdated(false)
     try {
-      const res = await fetch("/api/users/${user._id}", {
+      const response = await fetch('/api/users/${user._id}', {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
@@ -41,7 +43,7 @@ function Profile() {
         credentials: 'include',
         body: JSON.stringify({ username, email, password })
       })
-      console.log(res.data);
+      console.log(response.data);
       setUpdated(true)
 
     }
@@ -51,9 +53,9 @@ function Profile() {
     }
 
   }
-  const handleDelete = async () => {
+  const handleUserDelete = async () => {
     try {
-      const res = await axios.delete("/api/users" + user._id, {
+      const res = await axios.delete("/api/users/" + user._id, {
         withCredentials: true,
       })
       setUser(null)
@@ -95,7 +97,7 @@ function Profile() {
             <button onClick={handleUserUpdated} className='text-white font-semibold bg-black px-4 py-2 hover:text-black hover:bg-gray-400'>
               Update
             </button>
-            <button onClick={handleDelete} className='text-white font-semibold bg-black px-4 py-2 hover:text-black hover:bg-gray-400'>
+            <button onClick={handleUserDelete} className='text-white font-semibold bg-black px-4 py-2 hover:text-black hover:bg-gray-400'>
               Delete
             </button>
           </div>

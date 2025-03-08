@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { UserContext } from '../context/userContext'
+import { UserContext } from '../context/UserContext'
 import axios from 'axios'
 import Navbar from '../components/Navbar'
 import Loader from '../components/Loader'
 import HomePost from '../components/HomePost'
+import Footer from '../components/Footer'
+import { URL } from '../url'
 
 
 function MyBlogs() {
@@ -25,6 +27,7 @@ function MyBlogs() {
       else {
         setNoResults(false)
       }
+      setLoader(false)
     }
     catch (err) {
       console.log(err);
@@ -46,17 +49,20 @@ function MyBlogs() {
           <div className='h-[40vh] flex justify-center items-center'><Loader /></div>
           : !noResults ?
             posts.map((posts) => (
-              <div className='w-[40vh] mt-5'>
+              <>
                 <Link to={user ? '/posts/post/${post._id}' : "/login"}>
                   <HomePost key={posts._id} post={posts} />
                 </Link>
-              </div>
+              </>
+             
+
             )) :
             <h3 className='text-center font-bold mt-16'>
               No posts available
             </h3>
         }
       </div>
+      <Footer/>
     </div>
   )
 }

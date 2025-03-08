@@ -10,7 +10,7 @@ function Register() {
   const [username, setUsername] = useState("")
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
-  const [error, seterror] = useState(false)
+  const [error, setError] = useState(false)
   const navigate = useNavigate()
 
   const handleRegister = async () => {
@@ -21,11 +21,11 @@ function Register() {
       setUsername(res.data.username)
       setemail(res.data.email)
       setpassword(res.data.password)
-      seterror(false)
+      setError(false)
       navigate("/login")
 
     } catch (err) {
-      seterror(true)
+      setError(true)
       console.log(err);
 
     }
