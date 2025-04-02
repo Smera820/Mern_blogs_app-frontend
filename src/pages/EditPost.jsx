@@ -6,7 +6,7 @@ import { UserContext } from '../context/UserContext'
 import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { ImCross } from 'react-icons/im'
-
+import { URL } from '../url'
 
 function EditPost() {
   const postId = useParams().id
@@ -15,15 +15,15 @@ function EditPost() {
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
   const [file, setFile] = useState(null)
-  const [cat, setCat] = useState("a")
+  const [cat, setCat] = useState("")
   const [cats, setCats] = useState([])
 
   const fetchPost = async () => {
     try {
-      const res = await axios.get("/api/posts/" + postId)
+      const res = await axios.get(URL+`/api/post/${postId}`)
       setTitle(res.data.title)
       setDesc(res.data.desc)
-      setFile(res.data.photo)
+      setFile(null)
       setCats(res.data.categories)
     }
     catch (err) {
@@ -37,30 +37,32 @@ function EditPost() {
     const post = {
       title,
       desc,
-      username: user.username, 
-      userId: user.userId, 
+      username:user.username, 
+      userId:user._id, 
       categories: cats
       // file: res.data.photo
-    };
+    }
 
     if (file) {
       const data = new FormData();
-      const fileName = Date.now() + file.name;
-      data.append("img", fileName);
+      const filename = file.name;
+      data.append("img", filename);
       data.append("file", file);
-      post.photo = fileName;
+      post.photo = filename;
 
       try {
-        await axios.post("/api/upload", data);
+    await axios.post(URL+"/api/upload", data);
+      //  console.log(imgUpload.data);
+       
       } catch (err) {
         console.log(err);
-        return;
+       
       }
 
     }
     try {
-      const res = await axios.put("/api/posts/", postId, post, { withCredentials: true });
-      navigate("/posts/post/" + res.data._id);
+      const res = await axios.put(URL+`/api/post/${postId}`, post, { withCredentials: true });
+      navigate(`/posts/post/" ${res.data._id}`);
     } catch (err) {
       console.log(err);
     }
@@ -71,14 +73,14 @@ function EditPost() {
 
   const deleteCategory = (i) => {
     let updatedCats = [...cats]
-    updatedCats.splice(i)
+    updatedCats.splice(i,1)
     setCats(updatedCats)
   }
 
   const addCategory = () => {
     let updatedCats = [...cats]
     updatedCats.push(cat)
-    setCat(" ")
+    setCat("")
     setCats(updatedCats)
   }
 
@@ -87,17 +89,17 @@ function EditPost() {
     <div>
       <Navbar />
 
-      <div classNames=' flex justify-center' >
+      <div className=' flex justify-center' >
 
         <div className='p-4 border w-[70%] flex flex-col justify-center px-6 md:px-[200px] mt-8 '>
 
           <h1 className='font-hold flex justify-center md:text-2x1 text-xl '>Update Your Post </h1>
-          <form classNames=' w-full flex flex-col space-y-4 md space-y-8 at-4'>
+          <form className=' w-full flex flex-col space-y-4 md space-x-8 at-4'>
 
             <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} 
                 placeholder='Enter post title'
               className='px-4 py-2 outline-none' />
-            <input type="file" className='px-4' onChange={(e) => setFile(e.target.files[0])} value={file} />
+            <input type="file" className='px-4' onChange={(e) => setFile(e.target.files[0])}  />
 
             <div className='flex flex-col'>
               <div className='flex items-center space-x-4 md:space-x-8'>

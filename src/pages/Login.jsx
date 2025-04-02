@@ -7,40 +7,52 @@ import { UserContext } from '../context/UserContext'
 
 
 function Login() {
- 
-  const [email, setemail] = useState("")
-  const [password, setpassword] = useState("")
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
-  const { setUser } = useContext(UserContext)
+  const { setUser} = useContext(UserContext)
   const navigate = useNavigate()
+  
 
-  const handleLogin = async () => {
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
     try {
-      // const res=await axios.post(URL+"/api/auth/login",{email,password},{withCredentials:true})
-      const res = await fetch( "/api/auth/login", {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
+      // Using axios to make the POST request
+      const res = await axios.post(URL + "/api/auth/login",
+        {
+          email: email,
+          password: password
         },
-        credentials: 'include',
-        body: JSON.stringify({ email: email, password: password })
-      })
+        {
+          withCredentials: true,  // This is similar to the 'credentials: include' in fetch
+        }
+      );
 
-      if (res.ok) {
-        const data = await res.json()
-        const cookies = res.headers.get('Set-Cookies')
-        console.warn('Data:', data);
-        console.warn('Cookies:', cookies);
-
-        setUser(data)
-      }
-      else {
-        console.error('Request failed with status:', res.status);
+      // If the request was successful
+      if (res.status === 200) {
+        const data = res.data;  // Extract JSON data
+        // const cookies = res.headers['set-cookie'];  // Extract cookies if needed
+        // console.log('Data:', data);
+        // console.log('Cookies:', cookies);
+        const token = data.token
+        const role = data.role
 
 
-      }
-      navigate("/")
-
+        if (token){
+          console.log(token);
+          localStorage.setItem("token",token)
+          const authData = { token, role };
+          localStorage.setItem("authData", JSON.stringify(authData));
+          setUser(data);  // Update the state with user data
+          navigate("/");  // Navigate after successful login
+        } else {
+          console.error('Request failed with status:', res.status);
+        }
+  
+        
+        }
 
     }
     catch (err) {
@@ -67,10 +79,10 @@ function Login() {
           <h1 className='text-xl font-bold text-left'>
             Login to your account
           </h1>
-  
-          <input onChange={(e) => setemail(e.target.value)} className='w-full px-4 py-2 border-black outline-0' type='email' placeholder='Enter your email'>
+
+          <input onChange={(e) => setEmail(e.target.value)} className='w-full px-4 py-2 border-black outline-0' type='email' placeholder='Enter your email'>
           </input>
-          <input onChange={(e) => setpassword(e.target.value)} className='w-full px-4 py-2 border-black outline-0' type='password' placeholder='Enter your password'>
+          <input onChange={(e) => setPassword(e.target.value)} className='w-full px-4 py-2 border-black outline-0' type='password' placeholder='Enter your password'>
           </input>
 
           <button onClick={handleLogin} className='w-full px-4 py-4 text-lg font-bold text-white bg-black rounded-lg hover-bg-grey-500 hover:text-black'>
@@ -82,7 +94,7 @@ function Login() {
           }
           <div className='flex justify-center items-center space-x-3'>
             <p>
-              New Here
+              New Here?
             </p>
             <p className='text-green-500 hover:text-black'>
 

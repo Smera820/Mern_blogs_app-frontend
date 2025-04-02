@@ -1,129 +1,215 @@
-import React, { useContext, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BsSearch} from "react-icons/bs"; 
-import {FaBars} from "react-icons/fa"
-import Menu from './Menu'
-import { UserContext } from '../context/UserContext';
+// import { useState, useEffect, useContext } from "react";
+// import { Link, useLocation, useNavigate } from "react-router-dom";
+// import { BsSearch } from "react-icons/bs";
+// import {FaBars} from "react-icons/fa"
+// import Menu from './Menu'
+// import { UserContext } from "../context/UserContext";
+
+// const Navbar = () => {
+//   const navigate = useNavigate();
+//   // const [token, setToken] = useState(localStorage.getItem("authData"));
+//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const[menu,setMenu]=useState(false)
+// const path=useLocation().pathname
+
+//   const showMenu =()=>{
+//     setMenu(!menu)
+//   }
+// const {user}=useContext(UserContext)
+
+//   // useEffect(() => {
+//   //   setToken(localStorage.getItem("authData"));
+//   // }, []);
+
+//   // const handleLogout = () => {
+//   //   localStorage.removeItem("authData"); // Remove token
+//   //   setToken(null);
+//   //   navigate("/login"); // Redirect to login
+//   // };
+
+//   return (
+//     <nav className="bg-gray-800">
+//       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+//         <div className="relative flex h-16 items-center justify-between">
+//           {/* Mobile Menu Button */}
+//           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+//              <button
+//              type="button"
+//               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+//               className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-none"
+//             >
+//               <span className="sr-only">Open main menu</span>
+//             {isMobileMenuOpen ? (
+//                 <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+//                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+//                 </svg>
+//               ) : (
+//                 <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+//                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+//                  </svg>
+//               )}
+//              </button>
+//            </div>
+
+//           {/* Desktop Menu */}
+//            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+//              <div className="flex shrink-0 items-center">
+//                <Link to="/" className="text-white text-xl font-bold">Blogosphere</Link>
+//              </div>
 
 
-function Navbar() {
-    const [promt, setPrompt] = useState(" ")
-    const [menu, setMenu] = useState(false)
-    const navigate = useNavigate()
-    const path = useLocation().pathname
+//             {/* Search Bar (Only on Home Page) */}
+//              {path === "/" && (
+//             <div className="hidden sm:flex items-center ml-6">
+//                  <input
+//                    className="outline-none rounded-l-xl px-3 py-1 text-black bg-white"
+//                    placeholder="Search a post"
+//                    type="text"
+//                    value={searchQuery}
+//                    onChange={(e) => setSearchQuery(e.target.value)}
+//                  />
+//                  <button
+//                    onClick={() => navigate(searchQuery ? `?search=${searchQuery}` : "/")}
+//                    className="cursor-pointer p-2 bg-white text-black rounded-r-xl"
+//                  >
+//                    <BsSearch />
+//               </button>
+//                </div>
+//              )}
 
-    const showMenu = () => {
-        showMenu(!menu)
-    }
-    const { user } = useContext(UserContext)
+//              {/* Right Side Buttons (Desktop) */}
 
-    return (
-        <div>
-            {/* <div className='flex items-center justify-between px-50 md:px-{200px} py-4 bg-black text-white'>
-                {/* <h1 className='text-lg md:text-xl font-extrabold'>
-                    <Link to="/">Blogoshere</Link>
 
-                </h1> */}
-                {/* {path === "/" && <div onChange={(e) => setPrompt(e.target.value)} className='flex justify-center items-center space-x-0'>
-                    <input className='outlin-none rounded-l-xl px-3 text-black bg-white' placeholder='Search a post' type='text' />
-                    <p onClick={() => navigate(prompt ? "?search" + prompt : navigate("/"))} className='cursor-pointer p-1 bg-white text-black rounded-r-xl'>
-                        <BsSearch />
-                    </p>
-                </div>} */}
-                {/* <div className='hidden md:flex items-center justify-center space-x-4'>
-                    {
-                        user ? <h3><Link to='/write'>Write</Link></h3> : <h3>
-                            <Link to="/login">Login</Link>
-                        </h3>
-                    }
-                    {user ? <div onClick={showMenu}>
-                        <p className='cursor-pointer relative'></p>
-                            <FaBars />
-                            {menu && <Menu />}
+           
+
+
+
+//            <div className="hidden sm:flex items-center space-x-4 ml-auto">
+//            <div className='hidden md:flex items-center justify-center space-x-4'> 
+//              {
+//                           user ? <h3><Link to='/write' className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Write</Link></h3> : <h3>
+//                               <Link to="/login" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Login</Link>
+//                           </h3>
+//                       }
+//                       {user ? <div onClick={showMenu}>
+//                           <p className='cursor-pointer relative text-gray-300'><FaBars /></p>
+                            
+//                               {menu && <Menu />}
 
                         
-                    </div> : <h3><Link to='/register'>Register</Link></h3>}
-                </div>
-                <div onClick={showMenu} className='md:hidden text-lg'>
-                    <p className='cursor-pointer relative'></p>
-                    <FaBars />
-                    {menu && <Menu />} */}
-            
+//                       </div> : <h3><Link to='/register' className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Register</Link></h3>}
+//                   </div>
+//                   <div onClick={showMenu} className='md:hidden text-lg'>
+//                       <p className='cursor-pointer relative'><FaBars /></p>
+                    
+//                     {menu && <Menu />} 
 
-                {/* </div> */}
+//  </div>
+//               {/* {token ? (
+//                 <button
+//                   onClick={handleLogout}
+//                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+//                 >
+//                   Logout
+//                 </button>
+//               ) : (
+//                 <>
+//                   <Link to="/login" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+//                     Login
+//                   </Link>
+//                   <Link to="/register" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+//                     Register
+//                   </Link>
+//                 </>
+//               )} */}
+//              </div> 
+//            </div>
+//          </div>
+//        </div>
 
-            {/* </div>  */}
-            
+//       {/* Mobile Menu */}
+//       {menu && (
+//          <div className="sm:hidden absolute top-16 left-0 w-full bg-gray-800 z-50 p-4 flex flex-col items-start space-y-3">
+//            {user ? (
+//              <>
+//                <Link to="/write" className="text-white text-sm hover:text-gray-400">Write</Link>
+//                <Link to={`/profile/${user._id}`} className="text-white text-sm hover:text-gray-400">Profile</Link>
+//                <Link to={`/myblogs/${user._id}`} className="text-white text-sm hover:text-gray-400">My Blogs</Link>
+//                <button onClick={() => setMenu(false)} className="text-white text-sm hover:text-gray-400">
+//                  Close Menu
+//                </button>
+//              </>
+//            ) : (
+//              <>
+//                <Link to="/login" className="text-white text-sm hover:text-gray-400">Login</Link>
+//                <Link to="/register" className="text-white text-sm hover:text-gray-400">Register</Link>
+//                <button onClick={() => setMenu(false)} className="text-white text-sm hover:text-gray-400">
+//                  Close Menu
+//                </button>
+//              </>
+//            )}
+//          </div>
+//        )}
+//      </nav>
+//    );
+//  };
+
+//  export default Navbar;
 
 
 
 
-<nav class="bg-gray-800">
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-    <div class="relative flex h-16 items-center justify-between">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        {/* <!-- Mobile menu button--> */}
-        <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset" aria-controls="mobile-menu" aria-expanded="false">
-          <span class="absolute -inset-0.5"></span>
-          <span class="sr-only">Open main menu</span>
-          {/* <!--
-            Icon when menu is closed.
 
-            Menu open: "hidden", Menu closed: "block"
-          --> */}
-          <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-          {/* <!--
-            Icon when menu is open.
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import {BsSearch} from 'react-icons/bs'
+import {FaBars} from 'react-icons/fa'
+import { useContext, useState } from "react"
+import Menu from "./Menu"
+import { UserContext } from "../context/UserContext"
 
-            Menu open: "block", Menu closed: "hidden"
-          --> */}
-          <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-        <div class="flex shrink-0 items-center">
-      
-        </div>
-        <div class="hidden sm:ml-6 sm:block">
-          <div class="flex space-x-4">
-            {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-            <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page"><Link to="/">Blogoshpere</Link></a>
-            {path === "/" && <div onChange={(e) => setPrompt(e.target.value)} className='flex justify-center items-center space-x-0'>
-                    <input className='outlin-none rounded-l-xl px-3 text-black bg-white' placeholder='Search a post' type='text' />
-                    <p onClick={() => navigate(prompt ? "?search" + prompt : navigate("/"))} className='cursor-pointer p-1 bg-white text-black rounded-r-xl'>
-                        <BsSearch />
-                    </p>
-                    <div className='hidden md:flex  items-center justify-center space-x-4 '>
-                    <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"><Link to="/login">Login</Link></a>
-         <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"><Link to="/register">Register</Link></a>
-</div>
-                </div>}
-          </div>
-        </div>
-      </div>
-     
+
+
+const Navbar = () => {
+  
+  const [prompt,setPrompt]=useState("")
+  const [menu,setMenu]=useState(false)
+  const navigate=useNavigate()
+  const path=useLocation().pathname
+  
+  // console.log(prompt)
+  
+
+  const showMenu=()=>{
+    setMenu(!menu)
+  }
+  
+   
+    const {user}=useContext(UserContext)
+    
+  return (
+    <div className="flex items-center justify-between px-6 md:px-[200px] py-4 bg-black text-white  ">
+    <h1 className="text-lg md:text-xl font-extrabold"><Link to="/">Blogosphere </Link></h1>
+    {path==="/" && <div className="flex justify-center items-center space-x-0">
+    <input onChange={(e)=>setPrompt(e.target.value)} className="outline-none px-3 text-black  bg-white rounded-l-xl" placeholder="Search a post" type="text"/>
+    <p onClick={()=>navigate(prompt?"?search="+prompt:navigate("/"))} className="cursor-pointer p-1 bg-white text-black  rounded-r-xl "><BsSearch/></p>
+    
+    </div>}
+    <div className="hidden md:flex items-center justify-center space-x-2 md:space-x-4">
+      {user? <h3><Link to="/write">Write</Link></h3> :<h3><Link to="/login">Login</Link></h3>}
+      {user? <div onClick={showMenu}>
+        <p className="cursor-pointer relative"><FaBars/></p>
+        {menu && <Menu/>}
+      </div>:<h3><Link to="/register">Register</Link></h3>}
     </div>
-  </div>
-
-  {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-  <div class="sm:hidden" id="mobile-menu">
-    <div class="space-y-1 px-2 pt-2 pb-3">
-      {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-      <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page"><Link to="/">Blogoshere</Link></a>
-      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"><Link to="/login">Login</Link></a>
-      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"><Link to="/register">Register</Link></a>
-      {/* <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a> */}
+    <div onClick={showMenu} className="md:hidden text-lg">
+      <p className="cursor-pointer relative"><FaBars/></p>
+      {menu && <Menu/>}
     </div>
-  </div>
-</nav>
 
-
-        </div>
-    )
+    </div>
+  )
 }
+
 
 export default Navbar

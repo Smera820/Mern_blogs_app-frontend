@@ -5,11 +5,11 @@ import { MdDelete } from 'react-icons/md'
 import { UserContext } from '../context/UserContext'
 
 
-function Comment() {
+function Comment({c,post}) {
   const { user } = useContext(UserContext)
   const deleteComment = async (id) => {
     try {
-      await axios.delete(URL + "/api/comments/" + id, { withCredentials: true })
+      await axios.delete(URL+"/api/comments/"+ id, { withCredentials: true })
       window.location.reload(true)
     } 
     catch (err) {
@@ -29,8 +29,7 @@ function Comment() {
               <p className='cursor_pointer' onClick={() => deleteComment(c._id)}>
                 <MdDelete />
               </p>
-            </div> : " "
-          }
+            </div> : ""}
 
         </div>
 

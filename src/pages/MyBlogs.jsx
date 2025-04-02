@@ -16,10 +16,17 @@ function MyBlogs() {
   const [loader, setLoader] = useState(false)
   const { user } = useContext(UserContext)
 
-  const featchPosts = async () => {
+
+  const fetchPosts = async () => {
     setLoader(true)
+    const token=localStorage.getItem("token")
     try {
-      const res = await axios.get(URL + "/api/posts/user/" + user._id)
+      const res = await axios.get(URL+`/api/post/user/${user._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true
+        }
+      )
       setPosts(res.data)
       if (res.data.length === 0) {
         setNoResults(true)
@@ -29,29 +36,30 @@ function MyBlogs() {
       }
       setLoader(false)
     }
-    catch (err) {
+    catch(err) {
       console.log(err);
       setLoader(true)
 
 
     }
+    console.log("User from context:", user);
+
   }
 
   useEffect(() => {
-    featchPosts()
-  }, [search])
+    if(user?._id)
+    fetchPosts()
+  }, [user._id])
 
   return (
     <div>
       <Navbar />
       <div className='px-8 md:px-[200px] min-h-[80vh]'>
-        {loader ?
-          <div className='h-[40vh] flex justify-center items-center'><Loader /></div>
-          : !noResults ?
-            posts.map((posts) => (
+        {loader?<div className='h-[40vh] flex justify-center items-center'><Loader /></div>:!noResults ?
+            posts.map((post) => (
               <>
-                <Link to={user ? '/posts/post/${post._id}' : "/login"}>
-                  <HomePost key={posts._id} post={posts} />
+                <Link to={user?`/posts/post/${post._id}`:"/login"}>
+                  <HomePost key={post._id} post={post} />
                 </Link>
               </>
              

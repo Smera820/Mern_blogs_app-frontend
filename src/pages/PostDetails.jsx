@@ -14,42 +14,36 @@ import { FcManager } from "react-icons/fc"
 function PostDetails() {
 
   const postId = useParams().id
-  const [post, setPost] = useState()
+  const [post, setPost] = useState({})
   const { user } = useContext(UserContext)
   const [comments, setComments] = useState([])
-  const [comment, setComment] = useState(" ")
+  const [comment, setComment] = useState("")
   const [loader, setLoader] = useState(false)
   const navigate = useNavigate()
 
-  const fetchPost = async () => {
-    try {
-      const res = await axios.get("/api/post/" + postId)
-      setPost(res.data)
-    }
-    catch (err) {
-      console.log(err);
+  useEffect(()=>{
 
+    const fetchPost = async () => {
+      try {
+        const res = await axios.get(URL+`/api/post/${postId}`)
+        if(res.data){
+          setPost(res.data)
+        }
+      }
+      catch (err) {
+        console.log(err);
+  
+      }
     }
-  }
-  const handleDeletePost = async () => {
-    try {
-      const res = await axios.delete("api/posts/" + postId, { withCredentials: true })
-      console.log(res.data);
-      navigate("/")
-
-    }
-    catch (err) {
-      console.log(err);
-    }
-  }
-  useEffect(() => {
     fetchPost()
-  }, [postId])
+  },[postId])
 
+
+  
   const fetchPostComments = async () => {
     setLoader(true)
     try {
-      const res = await axios.get(URL + "/api/comments/post/" + postId)
+      const res = await axios.get(URL+`/api/comments/post/${postId}`)
       setComments(res.data)
       setLoader(false)
     }
@@ -61,17 +55,55 @@ function PostDetails() {
   }
 
   useEffect(() => {
-    fetchPostComments()
-  }, [postId]
-  )
+    if (postId) {
+      
+      fetchPostComments()
+    }
+  }, [postId])
+  
+  const handleDeletePost = async () => {
+    try {
+      const res = await axios.delete(URL+`/api/post/${postId}`, { withCredentials: true })
+      console.log(res.data);
+      navigate('/')
+
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
 
   const postComment = async (e) => {
     e.preventDefault()
+  
+    const authData = localStorage.getItem("authData");
+    const token = authData ? JSON.parse(authData).token : null;
+    if (!token) {
+      console.log("No token found in localStorage.");
+      return;
+  }
+
+  console.log(token);
+  
     try {
-      const res = await axios.post(URL + "/api/comments/create/",
-        { comment: comment, author: user.username, postId: postId, userId: user._id },
-        { withCredentials: true })
-      window.location.reload(true)
+      
+      const res = await axios.post(URL+"/api/comments/create",
+        { comment: comment,
+           author: user.username, 
+           postId: postId,
+            userId: user._id 
+          },
+        { 
+          headers:{ Authorization:`Bearer ${token}`,
+          },
+          withCredentials:true
+        }
+      )
+      console.log("comment post",res.data);
+      
+        fetchPostComments()
+        setComment("")
+
     }
     catch (err) {
       console.log(err);
@@ -91,8 +123,7 @@ function PostDetails() {
             <h1 className='text-3xl font-bold text-black md:3-xl'>
               {post.title}
             </h1>
-            {
-              user?._id === post?.userId && <div className='flex items-center justify-center x-2'>
+            {user?._id === post?.userId && <div className='flex items-center justify-center x-2'>
                 <p className="cursor-pointer" onClick={() => navigate("/edit/" + postId)} ><BiEdit /></p>
                 <p className='cursor-pointer' onClick={handleDeletePost}>
                   <MdDelete />
@@ -110,10 +141,11 @@ function PostDetails() {
             </div>
           </div>
           <div className='w-[100%] flex flex-col justify-center'>
-            <img src={IF + post + photo} className='object-cover h-[45vh] mx-auto mt-8' />
+            <img src={IF+post.photo} 
+            className='object-cover h-[45vh] mx-auto mt-8' />
             <p className='mx-auto mt-8 w-[80vh] border p-5 shadow-xl'>{post.desc}</p>
             <div className='flex justify-center items-center mt-8 space-x-4 font-semibold'>
-              <p>Categories</p>
+              <p>Categories: </p>
               <div className='flex justify-center items-center space-x-2'>
                 {post.categories?.map((c, i) => (
                   <div>
@@ -126,8 +158,7 @@ function PostDetails() {
             </div>
             <div className='flex justify-center items-center p-3 flex-col mt-4'>
               <h3 className='flex justify-center items-center mt-8 space-x-4 font-semibold'>Comments:</h3>
-              {
-                comments?.map((c) => (
+              {comments?.map((c) => (
                   <Comment className="" key={c._id} c={c} post={post} />
                 ))
               }
