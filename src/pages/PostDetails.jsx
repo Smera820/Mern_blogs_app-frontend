@@ -21,29 +21,32 @@ function PostDetails() {
   const [loader, setLoader] = useState(false)
   const navigate = useNavigate()
 
-  useEffect(()=>{
+  useEffect(() => {
 
     const fetchPost = async () => {
       try {
-        const res = await axios.get(URL+`/api/post/${postId}`)
-        if(res.data){
+        const res = await axios.get(URL + `/api/post/${postId}`)
+        if (res.data) {
           setPost(res.data)
         }
       }
       catch (err) {
         console.log(err);
-  
+
       }
     }
-    fetchPost()
-  },[postId])
+    if (postId) {
+      fetchPost()
+    }
+
+  }, [postId])
 
 
-  
+
   const fetchPostComments = async () => {
     setLoader(true)
     try {
-      const res = await axios.get(URL+`/api/comments/post/${postId}`)
+      const res = await axios.get(URL + `/api/comments/post/${postId}`)
       setComments(res.data)
       setLoader(false)
     }
@@ -56,14 +59,28 @@ function PostDetails() {
 
   useEffect(() => {
     if (postId) {
-      
+
       fetchPostComments()
     }
   }, [postId])
-  
+
   const handleDeletePost = async () => {
+    const authData = localStorage.getItem("authData");
+    const token = authData ? JSON.parse(authData).token : null;
+
+    if (!token) {
+      console.log("No token found in localStorage.");
+      return;
+    }
+
     try {
-      const res = await axios.delete(URL+`/api/post/${postId}`, { withCredentials: true })
+      const res = await axios.delete(URL + `/api/post/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          withCredentials: true
+        })
       console.log(res.data);
       navigate('/')
 
@@ -75,35 +92,39 @@ function PostDetails() {
 
   const postComment = async (e) => {
     e.preventDefault()
-  
+
     const authData = localStorage.getItem("authData");
     const token = authData ? JSON.parse(authData).token : null;
     if (!token) {
       console.log("No token found in localStorage.");
       return;
-  }
+    }
 
-  console.log(token);
-  
+    console.log(token);
+    console.log("Sending Comment:", comment);
+
+
     try {
-      
-      const res = await axios.post(URL+"/api/comments/create",
-        { comment: comment,
-           author: user.username, 
-           postId: postId,
-            userId: user._id 
+
+      const res = await axios.post(URL + "/api/comments/create",
+        {
+          comment: comment,
+          author: user.username,
+          postId: postId,
+          userId: user._id
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        { 
-          headers:{ Authorization:`Bearer ${token}`,
-          },
-          withCredentials:true
+          withCredentials: true
         }
       )
-      console.log("comment post",res.data);
-      
-        fetchPostComments()
-        setComment("")
+      console.log("comment post", res.data);
 
+
+      setComment("")
+      fetchPostComments()
     }
     catch (err) {
       console.log(err);
@@ -124,11 +145,11 @@ function PostDetails() {
               {post.title}
             </h1>
             {user?._id === post?.userId && <div className='flex items-center justify-center x-2'>
-                <p className="cursor-pointer" onClick={() => navigate("/edit/" + postId)} ><BiEdit /></p>
-                <p className='cursor-pointer' onClick={handleDeletePost}>
-                  <MdDelete />
-                </p>
-              </div>
+              <p className="cursor-pointer" onClick={() => navigate("/edit/" + postId)} ><BiEdit /></p>
+              <p className='cursor-pointer' onClick={handleDeletePost}>
+                <MdDelete />
+              </p>
+            </div>
             }
           </div>
 
@@ -141,8 +162,8 @@ function PostDetails() {
             </div>
           </div>
           <div className='w-[100%] flex flex-col justify-center'>
-            <img src={IF+post.photo} 
-            className='object-cover h-[45vh] mx-auto mt-8' />
+            <img src={IF + post.photo}
+              className='object-cover h-[45vh] mx-auto mt-8' />
             <p className='mx-auto mt-8 w-[80vh] border p-5 shadow-xl'>{post.desc}</p>
             <div className='flex justify-center items-center mt-8 space-x-4 font-semibold'>
               <p>Categories: </p>
@@ -158,9 +179,9 @@ function PostDetails() {
             </div>
             <div className='flex justify-center items-center p-3 flex-col mt-4'>
               <h3 className='flex justify-center items-center mt-8 space-x-4 font-semibold'>Comments:</h3>
-              {comments?.map((c) => (
-                  <Comment className="" key={c._id} c={c} post={post} />
-                ))
+              {comments?.map((c, index) => (
+                <Comment key={c._id || index} c={c} post={post} />
+              ))
               }
 
             </div>

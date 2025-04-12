@@ -6,7 +6,7 @@ function HomePost({ post }) {
   return (
     <div>
       <div className='flex flex-wrap bg-white border-gray-300 shadow'>
-       
+
         <div className='overflow-hidden w-full sm:w-1/3 h-48'>
           <img
             className='object-cover w-full h-full hover:scale-105 transition-transform duration-300'
@@ -15,7 +15,7 @@ function HomePost({ post }) {
           />
         </div>
 
-      
+
         <div className='pl-3 w-full sm:w-2/3 flex flex-col justify-between p-4'>
           <h5 className='text-xl font-bold tracking-tight text-gray-950'>
             {post.title}

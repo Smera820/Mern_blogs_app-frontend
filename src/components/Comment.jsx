@@ -5,13 +5,25 @@ import { MdDelete } from 'react-icons/md'
 import { UserContext } from '../context/UserContext'
 
 
-function Comment({c,post}) {
+function Comment({ c, post }) {
   const { user } = useContext(UserContext)
   const deleteComment = async (id) => {
+    const authData = localStorage.getItem("authData");
+    const token = authData ? JSON.parse(authData).token : null;
+
+    if (!token) {
+      console.log("No token found in localStorage.");
+      return;
+    }
+
     try {
-      await axios.delete(URL+"/api/comments/"+ id, { withCredentials: true })
+      await axios.delete(URL + "/api/comments/" + id, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }, withCredentials: true
+      })
       window.location.reload(true)
-    } 
+    }
     catch (err) {
       console.log(err);
 
@@ -24,7 +36,7 @@ function Comment({c,post}) {
         <h3 className='flex-bold text-gray-600'>@{c.author}</h3>
         <div className='flex justify-center items-center space-x-4'>
           <p>{new Date(c.updatedAt).toString().slice(3, 15)}</p>
-          { user?._id === c?.userId ? 
+          {user?._id === c?.userId ?
             <div className='flex justify-center items-center space-x-2'>
               <p className='cursor_pointer' onClick={() => deleteComment(c._id)}>
                 <MdDelete />

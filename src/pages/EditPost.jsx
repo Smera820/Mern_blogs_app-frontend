@@ -20,7 +20,7 @@ function EditPost() {
 
   const fetchPost = async () => {
     try {
-      const res = await axios.get(URL+`/api/post/${postId}`)
+      const res = await axios.get(URL + `/api/post/${postId}`)
       setTitle(res.data.title)
       setDesc(res.data.desc)
       setFile(null)
@@ -33,12 +33,20 @@ function EditPost() {
   }
 
   const handleUpdate = async (e) => {
+    const authData = localStorage.getItem("authData");
+    const token = authData ? JSON.parse(authData).token : null;
+
+    if (!token) {
+      console.log("No token found in localStorage.");
+      return;
+    }
+
     e.preventDefault();
     const post = {
       title,
       desc,
-      username:user.username, 
-      userId:user._id, 
+      username: user.username,
+      userId: user._id,
       categories: cats
       // file: res.data.photo
     }
@@ -51,17 +59,23 @@ function EditPost() {
       post.photo = filename;
 
       try {
-    await axios.post(URL+"/api/upload", data);
-      //  console.log(imgUpload.data);
-       
+        await axios.post(URL + "/api/upload", data);
+        //  console.log(imgUpload.data);
+
       } catch (err) {
         console.log(err);
-       
+
       }
 
     }
     try {
-      const res = await axios.put(URL+`/api/post/${postId}`, post, { withCredentials: true });
+      const res = await axios.put(URL + `/api/post/${postId}`, post, {
+
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        withCredentials: true
+      });
       navigate(`/posts/post/" ${res.data._id}`);
     } catch (err) {
       console.log(err);
@@ -73,7 +87,7 @@ function EditPost() {
 
   const deleteCategory = (i) => {
     let updatedCats = [...cats]
-    updatedCats.splice(i,1)
+    updatedCats.splice(i, 1)
     setCats(updatedCats)
   }
 
@@ -96,10 +110,10 @@ function EditPost() {
           <h1 className='font-hold flex justify-center md:text-2x1 text-xl '>Update Your Post </h1>
           <form className=' w-full flex flex-col space-y-4 md space-x-8 at-4'>
 
-            <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} 
-                placeholder='Enter post title'
+            <input type="text" onChange={(e) => setTitle(e.target.value)} value={title}
+              placeholder='Enter post title'
               className='px-4 py-2 outline-none' />
-            <input type="file" className='px-4' onChange={(e) => setFile(e.target.files[0])}  />
+            <input type="file" className='px-4' onChange={(e) => setFile(e.target.files[0])} />
 
             <div className='flex flex-col'>
               <div className='flex items-center space-x-4 md:space-x-8'>
@@ -115,7 +129,7 @@ function EditPost() {
                     <div key={i} className='flex justify-center space-x-2 mr-4 bg-gray-200 px-2 py-1 rounded-md'>
                       <p>{c}</p>
                       <p onClick={() => deleteCategory(i)} className='text-white bg-black rounded-full cursor-pointer p-1 text-sm'>
-                        <ImCross/>
+                        <ImCross />
                       </p>
                     </div>
                   ))}
